@@ -10,7 +10,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-## functions
+# functions
 def translator(text, language='english'):
     documents = [Document(page_content=text)]
     qa_translator = DoctranTextTranslator(language=language, openai_api_model='gpt-4')
@@ -40,8 +40,7 @@ def generate_response_agent(prompt, chosen_language):
 _ = load_dotenv(find_dotenv())  # read local .env file
 
 
-
-## webpage
+# webpage
 with st.sidebar:
     language_chosen = st.selectbox('Language',
                                    ('English', 'Hindi', 'Marathi')
@@ -60,7 +59,7 @@ if 'past' not in st.session_state:
 
 # We will get the user's input by calling the get_text function
 def get_text():
-    input_text = st.text_input("You:", "", key="input")
+    input_text = st.text_input("", "", key="input")
     return input_text
 
 
