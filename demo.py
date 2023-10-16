@@ -44,7 +44,7 @@ def get_result(user_input):
             message_placeholder.markdown(result + "▌")
         st.session_state.messages.append({"role": "assistant", "content": result})
 
-
+#TODO: fix this
 def get_result_agent(user_input):
     # The tools we'll give the Agent access to. Note that the 'llm-math' tool uses an LLM, so we need to pass that in.
     llm = ChatOpenAI(temperature=0, callbacks=[FinalStreamingStdOutCallbackHandler()],streaming=True)
