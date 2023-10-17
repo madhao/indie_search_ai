@@ -2,4 +2,4 @@ streamlit==1.27.2
 hugchat
 streamlit-chat
 streamlit-extras
-langchain=0.0.3
+langchain==0.0.3
