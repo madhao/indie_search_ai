@@ -4,3 +4,4 @@ streamlit-chat
 streamlit-extras
 langchain==0.0.135
 pydantic==1.10.9
+python-dotenv==1.0.0
