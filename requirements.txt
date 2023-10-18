@@ -1,7 +1,9 @@
 streamlit==1.27.2
+streamlit-chat==0.1.1
+streamlit-extras==0.3.4
 hugchat
 streamlit-chat
 streamlit-extras
-langchain==0.0.135
+langchain==0.0.130
 pydantic==1.10.9
 python-dotenv==1.0.0
