@@ -3,3 +3,4 @@ hugchat
 streamlit-chat
 streamlit-extras
 langchain==0.0.3
+pydantic==1.10.9
