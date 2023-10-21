@@ -10,13 +10,24 @@ _ = load_dotenv(find_dotenv())  # read local .env file
 
 
 class StreamHandler(BaseCallbackHandler):
-    def __init__(self, container, initial_text=""):
-        self.container = container
+    def __init__(self, initial_text=""):
+        self.container = st.empty()
         self.text = initial_text
-        
+
     def on_llm_new_token(self, token: str, **kwargs) -> None:
         self.text += token
         self.container.markdown(self.text)
+
+# class StreamHandler(BaseCallbackHandler):
+#     def __init__(self):
+#         self.msg = cl.Message(content="")
+
+#     async def on_llm_new_token(self, token: str, **kwargs):
+#         await self.msg.stream_token(token)
+
+#     async def on_llm_end(self, response: str, **kwargs):
+#         await self.msg.send()
+#         self.msg = cl.Message(content="")
 
 
 with st.sidebar:
@@ -40,7 +51,7 @@ if prompt := st.chat_input():
     st.chat_message("user").write(prompt)
 
     with st.chat_message("assistant"):
-        stream_handler = StreamHandler(st.empty())
+        stream_handler = StreamHandler()
         llm = ChatOpenAI(streaming=True, callbacks=[stream_handler],temperature=0,verbose=True)
         tools = load_tools(["serpapi", "llm-math","wikipedia"], llm= llm)
         agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
