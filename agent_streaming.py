@@ -4,9 +4,11 @@ from langchain.schema import ChatMessage
 import streamlit as st
 from langchain.agents import AgentType, initialize_agent, load_tools
 from langchain.schema import HumanMessage, SystemMessage
-
-from dotenv import load_dotenv, find_dotenv
-_ = load_dotenv(find_dotenv())  # read local .env file
+import os
+# from dotenv import load_dotenv, find_dotenv
+# _ = load_dotenv(find_dotenv())  # read local .env file
+os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
+os.environ['SERPAPI_API_KEY'] = st.secrets['SERPAPI_API_KEY']
 
 
 class StreamHandler(BaseCallbackHandler):
@@ -36,7 +38,8 @@ with st.sidebar:
                                    )
 
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [ChatMessage(role="assistant", content="How can I help you?")]
+    st.session_state["messages"] = [ChatMessage(
+        role="assistant", content="How can I help you?")]
 
 for msg in st.session_state.messages:
     st.chat_message(msg.role).write(msg.content)
@@ -44,17 +47,21 @@ for msg in st.session_state.messages:
 if prompt := st.chat_input():
     message_system = SystemMessage(content="You're are a helpful,"
                                            "talkative, and friendly assistant."
-                                           "Translate the output to {}".format(language_chosen)
-                                           )
+                                           "Translate the output to {}".format(
+                                               language_chosen)
+                                   )
     message_user = HumanMessage(content=prompt)
     st.session_state.messages.append(ChatMessage(role="user", content=prompt))
     st.chat_message("user").write(prompt)
 
     with st.chat_message("assistant"):
         stream_handler = StreamHandler()
-        llm = ChatOpenAI(streaming=True, callbacks=[stream_handler],temperature=0,verbose=True)
-        tools = load_tools(["serpapi", "llm-math","wikipedia"], llm= llm)
-        agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
+        llm = ChatOpenAI(streaming=True, callbacks=[
+                         stream_handler], temperature=0, verbose=True)
+        tools = load_tools(["serpapi", "llm-math", "wikipedia"], llm=llm)
+        agent = initialize_agent(
+            tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
         response = llm([message_system, message_user])
         print(response)
-        st.session_state.messages.append(ChatMessage(role="assistant", content=response.content))
+        st.session_state.messages.append(ChatMessage(
+            role="assistant", content=response.content))
